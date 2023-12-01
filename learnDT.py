@@ -12,7 +12,14 @@ from learnProblem import Learner, Evaluate
 from learnNoInputs import Predict
 import math
 
+# These lines import necessary classes and modules. It seems like the code is part of a 
+# larger project where different functionalities are organized into separate files (learnProblem and learnNoInputs).
+# The math module is also imported but not used in the provided code.
+
 class DT_learner(Learner):
+
+# This class inherits from the Learner class, suggesting that it's meant for supervised learning tasks.
+    
     def __init__(self,
                  dataset,
                  split_to_optimize=Evaluate.log_loss,     # to minimize for at each split 
@@ -33,10 +40,13 @@ class DT_learner(Learner):
         else:
             self.train = train
 
+    # This method initiates the learning process by calling learn_tree with the conditions obtained from the dataset.
     def learn(self, max_num_cuts=8):
         """learn a decision tree"""
         return self.learn_tree(self.dataset.conditions(self.max_num_cuts), self.train)
         
+    # This method recursively builds a decision tree. It selects the best feature to split on, and if no further split is beneficial, it returns a leaf node with a prediction.
+    
     def learn_tree(self, conditions, data_subset):
         """returns a decision tree
         conditions is a set of possible conditions
@@ -72,6 +82,8 @@ class DT_learner(Learner):
                            f" else {false_tree.__doc__})")
             fun.num_leaves = true_tree.num_leaves + false_tree.num_leaves
             return fun
+
+    
         
     def leaf_value(self, egs, domain):
         return self.leaf_prediction((self.target(e) for e in egs), domain)
@@ -130,6 +142,9 @@ def partition(data_subset,feature):
 
 from learnProblem import Data_set, Data_from_file
 
+# This function prints errors and trees for various evaluation criteria and ways to select leaves.
+# It takes a dataset, specifies whether to print the tree, and allows custom leaf selection methods.
+
 def testDT(data, print_tree=True, selections = None, **tree_args):
     """Prints errors and the trees for various evaluation criteria and ways to select leaves.
     """
@@ -149,10 +164,12 @@ def testDT(data, print_tree=True, selections = None, **tree_args):
                 print(tree.__doc__)
 
 #DT_learner.max_display_level = 4
+
+# The code then tests the decision tree learner on different datasets using the testDT function. The datasets considered include 'iris.data', 'carbool.csv', etc.
 if __name__ == "__main__":
     # Choose one of the data files
     #data=Data_from_file('data/SPECT.csv', target_index=0); print("SPECT.csv")
-    #data=Data_from_file('data/iris.data', target_index=-1); print("iris.data")
+    data=Data_from_file('data/iris.data', target_index=-1); print("iris.data")
     data = Data_from_file('data/carbool.csv', target_index=-1, seed=123)
     #data = Data_from_file('data/mail_reading.csv', target_index=-1);  print("mail_reading.csv")
     #data = Data_from_file('data/holiday.csv', has_header=True, num_train=19, target_index=-1); print("holiday.csv")
